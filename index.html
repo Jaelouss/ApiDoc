@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>ToDo Api Doc</title>
+</head>
+
+<body>
+  
+  <main id="main-doc">
+  <ul class='main-lists'>
+    <li class='main-items'>
+    <aside class="aside">
+      <nav id="navbar" class='navbar'>
+        <header>
+          <h2 class="aside-title">API to manage the task list</h2>
+        </header>
+        <ul class="aside-list">
+          <li class="aside-item">
+            <a href="#API" class="nav-link aside-link">API</a>
+          </li>
+          <li class="aside-item">
+            <a href="#Introduction_to_API" class="nav-link aside-link">Introduction to API</a>
+          </li>
+          <li class="aside-item">
+            <a href="#Authentication" class="nav-link aside-link">Authentication</a>
+          </li>
+          <li class="aside-item">
+            <a href="#Requests_and_answers_format" class="nav-link aside-link">Requests and answers format</a>
+          </li>
+          <li class="aside-item">
+            <a href="#Creating_a_task" class="nav-link aside-link">Creating a task</a>
+          </li>
+          <li class="aside-item">
+            <a href="#Obtaining_a_task_list" class="nav-link aside-link">Obtaining a task list</a>
+          </li>
+          <li class="aside-item">
+            <a href="#Update_the_task" class="nav-link aside-link">Update the task</a>
+          </li>
+          <li class="aside-item">
+            <a href="#Deleting_the_task" class="nav-link aside-link">Deleting the task</a>
+          </li>
+          <li class="aside-item">
+            <a href="#Filtering_and_sorting" class="nav-link aside-link">Filtering and sorting</a>
+          </li>
+          <li class="aside-item">
+            <a href="#Error_processing" class="nav-link aside-link">Error processing</a>
+          </li>
+          <li class="aside-item">
+            <a href="#Restrictions_and_quotas" class="nav-link aside-link">Restrictions and quotas</a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+    </li>
+     <li class='main-items'>
+        <section class="main-section" id="API">
+          <header>
+            <h1 class="main-title">API</h1>
+          </header>
+          <p class="main-text">Версія API: v1</p>
+          <p class="main-text">
+            Базовий URL: <code>https://api.todoexample.com/v1</code>
+          </p>
+          <p class="main-text">Дата оновлення: 13 квітня 2025 року</p>
+          <p class="main-text">
+            Цей API дозволяє керувати списком завдань через RESTful ендпоінти. Він
+            підтримує створення, перегляд, оновлення та видалення завдань, а також
+            додаткові функції, як-от фільтрація та групування. API повертає
+            відповіді у форматі JSON і використовує стандартні HTTP-коди статусу.
+          </p>
+        </section>
+        <section class="main-section" id="Introduction_to_API">
+          <header>
+            <h2 class="main-title">Introduction to API</h2>
+          </header>
+          <p class="main-text">
+            API для списку завдань розроблено для простого та інтуїтивного
+            управління завданнями. Воно підходить для особистих і командних
+            проєктів. Користувачі можуть створювати завдання, призначати статуси,
+            додавати описи та керувати їхньою видимістю. API підтримує
+            аутентифікацію через токени для забезпечення безпеки. Кожен запит
+            потребує заголовка <strong>Authorization</strong>. Документація
+            охоплює всі доступні ендпоінти та їхні параметри. Використовуйте
+            базовий URL для всіх запитів. API підтримує методи GET, POST, PUT,
+            DELETE. Відповіді завжди містять структуровані дані або повідомлення
+            про помилки. Для тестування рекомендується використовувати
+            інструменти, як-от Postman або curl. Обмеження запитів залежить від
+            вашого тарифного плану. У цій секції ви дізнаєтесь, як почати роботу.
+            Далі описано деталі аутентифікації та основні ендпоінти.
+          </p>
+          <ul class="main-list">
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Приклад коду</strong> (Тестовий запит для перевірки API):
+              </p>
+              <code>
+                curl -X GET https://api.todoexample.com/v1/health \
+                -H "Authorization: Bearer <your-token>"
+              </code>
+            </li>
+            <li class="main-item">
+              <p class="main-text"><strong>Очікувана відповідь</strong>:</p>
+               <code>
+                  {
+                    "status": "API is running",
+                    "version": "v1"
+                    }
+                    </code>
+            </li>
+          </ul>
+        </section>
+        <section class="main-section" id="Authentication">
+          <header>
+            <h2 class="main-title">Authentication</h2>
+          </header>
+          <p class="main-text">
+            Для доступу до API потрібна аутентифікація через Bearer-токен. Токен видається після реєстрації на платформі.
+            Його потрібно додавати до заголовка <strong>Authorization</strong> у кожному запиті. Без токена API поверне
+            помилку 401. Токен має обмежений термін дії (зазвичай 24 години). Для оновлення токена використовуйте ендпоінт
+            <code>/refresh-token</code>. Кожен користувач має унікальний токен, прив’язаний до його облікового запису.
+            Захистіть токен від стороннього доступу. API не підтримує незахищені запити. У разі некоректного токена
+            повертається деталізоване повідомлення про помилку. Рекомендуємо зберігати токен у безпечному сховищі. Якщо
+            токен втрачено, зверніться до служби підтримки. Ця секція пояснює, як правильно налаштувати аутентифікацію. Далі
+            йде опис формату запитів.
+          </p>
+          <ul class="main-list">
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Приклад коду </strong>(Запит із токеном):
+              </p>
+              <code>curl -X GET https://api.todoexample.com/v1/tasks \
+      -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</code>
+            </li>
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Очікувана відповідь: </strong>
+              </p>
+              <code>{
+                "tasks": []
+              }</code>
+            </li>
+          </ul>
+        </section>
+        <section class="main-section" id="Requests_and_answers_format">
+          <header>
+            <h2 class="main-title">Requests and answers format</h2>
+          </header>
+          <p class="main-text">
+            API використовує JSON для всіх запитів і відповідей. Усі запити повинні містити заголовок <strong>Content-Type:
+              application/json</strong>. Поля в запитах є чутливими до регістру. Обов’язкові поля позначено в документації.
+            Некоректні запити повертають код 400 із описом помилки. Відповіді завжди містять ключ <strong>data</strong> для
+            успішних запитів або <strong>error</strong> для помилок. Успішні запити повертають коди 200, 201 або 204. API
+            підтримує стандартні методи HTTP. Кожен ендпоінт має чітко визначені параметри. Параметри запиту передаються в
+            URL або тілі запиту. Деякі ендпоінти дозволяють опціональні фільтри. Помилки форматування призводять до відмови
+            в обробці. Переконайтеся, що ваш клієнт підтримує JSON. Ця секція допоможе вам правильно структурувати запити.
+          </p>
+          <ul class="main-list">
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Приклад коду</strong> (Форматування запиту):
+              </p>
+              <code>curl -X POST https://api.todoexample.com/v1/tasks \
+      -H "Authorization: Bearer <your-token>" \
+      -H "Content-Type: application/json" \
+      -d '{"title": "Нове завдання"}'</code>
+            </li>
+            <li class="main-item">
+    
+              <p class="main-text">
+                <strong> Очікувана відповідь:</strong>
+              </p>
+              <code>{
+      "data": {
+        "id": 1,
+        "title": "Нове завдання",
+        "status": "pending"
+      }
+    }</code>
+            </li>
+          </ul>
+        </section>
+        <section class="main-section" id="Creating_a_task">
+          <header>
+            <h2 class="main-title">Creating a task</h2>
+          </header>
+          <p class="main-text">
+            Ендпоінт для створення завдання дозволяє додавати нові записи до списку. Потрібно передати назву завдання в полі
+            <strong>title</strong>. Поле <strong>description</strong> є опціональним. Статус за замовчуванням —
+            <strong>pending</strong>. Запит повертає створене завдання з унікальним ID. API перевіряє валідність даних перед
+            збереженням. Назва завдання не може бути порожньою. Максимальна довжина назви — 255 символів. У разі успіху
+            повертається код 201. Помилки валідації повертають код 400. Завдання автоматично прив’язується до користувача за
+            токеном. Ви можете створювати до 100 завдань за хвилину. Цей ендпоінт є основою для роботи зі списком.
+            Переконайтеся, що тіло запиту відповідає формату JSON.
+          </p>
+          <ul class="main-list">
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Приклад коду</strong> (Створення завдання):
+              </p>
+              <code>curl -X POST https://api.todoexample.com/v1/tasks \
+      -H "Authorization: Bearer <your-token>" \
+      -H "Content-Type: application/json" \
+      -d '{"title": "Купити продукти", "description": "Молоко, хліб"}'</code>
+            </li>
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Очікувана відповідь:</strong>
+              </p>
+              <code>{
+      "data": {
+        "id": 1,
+        "title": "Купити продукти",
+        "description": "Молоко, хліб",
+        "status": "pending",
+        "created_at": "2025-04-13T10:00:00Z"
+      }
+    }</code>
+    
+            </li>
+          </ul>
+        </section>
+        <section class="main-section" id="Obtaining_a_task_list">
+          <header>
+            <h2 class="main-title">Obtaining a task list</h2>
+          </header>
+          <p class="main-text">
+            Цей ендпоінт повертає список усіх завдань користувача. Ви можете фільтрувати завдання за статусом
+            (<strong>pending</strong>, <strong>completed</strong>). Параметр <strong>limit</strong> обмежує кількість
+            записів у відповіді. Параметр <strong>offset</strong> використовується для пагінації. За замовчуванням
+            повертається до 50 завдань. Запит повертає масив об’єктів із деталями завдань. Кожне завдання містить ID, назву,
+            статус і дату створення. Фільтри є опціональними, але корисними для великих списків. API повертає код 200 у разі
+            успіху. Якщо завдань немає, повертається порожній масив. Некоректні параметри викликають помилку 400. Цей
+            ендпоінт оптимізовано для швидкої роботи. Використовуйте його для перегляду актуального списку.
+          </p>
+          <ul class="main-list">
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Приклад коду</strong> (Отримання завдань):
+              </p>
+              <code>curl -X GET https://api.todoexample.com/v1/tasks?status=pending&limit=10 \
+      -H "Authorization: Bearer <your-token>"</code>
+            </li>
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Очікувана відповідь:</strong>
+              </p>
+              <code>{
+      "data": [
+        {
+          "id": 1,
+          "title": "Купити продукти",
+          "status": "pending",
+          "created_at": "2025-04-13T10:00:00Z"
+        }
+      ]
+    }</code>
+    
+            </li>
+          </ul>
+        </section>
+        <section class="main-section" id="Update_the_task">
+          <header>
+            <h2 class="main-title">Update the task</h2>
+          </header>
+          <p class="main-text">
+            Ендпоінт дозволяє змінювати існуючі завдання. Потрібно вказати ID завдання в URL. У тілі запиту передавайте
+            оновлені поля (<strong>title</strong>, <strong>description</strong>, <strong>status</strong>). Поле
+            <strong>status</strong> може бути <strong>pending</strong> або <strong>completed</strong>. Запит повертає
+            оновлене завдання. Якщо завдання не знайдено, повертається код 404. API перевіряє валідність даних перед
+            оновленням. Назва завдання не може бути порожньою. Оновлення статусу не впливає на дату створення. Успішний
+            запит повертає код 200. Ви можете оновлювати завдання частково. Цей ендпоінт корисний для редагування деталей.
+            Переконайтеся, що ID є валідним числом.
+          </p>
+          <ul class="main-list">
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Приклад коду </strong>(Оновлення завдання):
+    
+              </p>
+              <code>curl -X PUT https://api.todoexample.com/v1/tasks/1 \
+      -H "Authorization: Bearer <your-token>" \
+      -H "Content-Type: application/json" \
+      -d '{"title": "Купити молоко", "status": "completed"}'</code>
+            </li>
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Очікувана відповідь:</strong>
+    
+              </p>
+              <code>{
+      "data": {
+        "id": 1,
+        "title": "Купити молоко",
+        "status": "completed",
+        "updated_at": "2025-04-13T11:00:00Z"
+      }
+    }</code>
+    
+            </li>
+          </ul>
+        </section>
+        <section class="main-section" id="Deleting_the_task">
+          <header>
+            <h2 class="main-title">Deleting the task</h2>
+          </header>
+          <p class="main-text">
+            Ендпоінт видаляє завдання за його ID. ID передається в URL запиту. Успішне видалення повертає код 200 і
+            підтвердження. Якщо завдання не існує, повертається код 404. Запит не потребує тіла. Видалені завдання не можна
+            відновити. API перевіряє права доступу перед видаленням. Тільки власник завдання може його видалити. Цей
+            ендпоінт є простим, але важливим для очищення списку. Використовуйте його обережно. Кількість видалень обмежена
+            тарифним планом. Переконайтеся, що ID вказано правильно.
+          </p>
+          <ul class="main-list">
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Приклад коду</strong>(Видалення завдання):
+    
+              </p>
+              <code>curl -X DELETE https://api.todoexample.com/v1/tasks/1 \
+      -H "Authorization: Bearer <your-token>"</code>
+            </li>
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Очікувана відповідь:</strong>
+    
+              </p>
+              <code>{
+      "message": "Завдання успішно видалено"
+    }</code>
+    
+            </li>
+          </ul>
+        </section>
+        <section class="main-section" id="Filtering_and_sorting">
+          <header>
+            <h2 class="main-title">Filtering and sorting</h2>
+          </header>
+          <p class="main-text">
+            API підтримує розширену фільтрацію та сортування завдань. Параметр <strong>status</strong> фільтрує за станом
+            завдання. Параметр <strong>sort_by</strong> дозволяє сортувати за полями <strong>created_at</strong> або
+            <strong>title</strong>. Параметр <strong>order</strong> визначає порядок (<strong>asc</strong> або
+            <strong>desc</strong>). Фільтри комбінуються для точного пошуку. Наприклад, ви можете отримати завершені
+            завдання, відсортовані за датою. Некоректні параметри повертають код 400. API оптимізовано для швидкої обробки
+            фільтрів. Максимальна кількість записів у відповіді — 100. Використовуйте пагінацію для великих списків. Ця
+            функція спрощує управління завданнями. Переконайтеся, що параметри відповідають документації.
+          </p>
+          <ul class="main-list">
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Приклад коду</strong>
+                (Фільтрація та сортування):
+              </p>
+              <code>curl -X GET https://api.todoexample.com/v1/tasks?status=completed&sort_by=created_at&order=desc \
+      -H "Authorization: Bearer <your-token>"</code>
+            </li>
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Очікувана відповідь:</strong>
+    
+              </p>
+              <code>{
+      "data": [
+        {
+          "id": 2,
+          "title": "Завершити звіт",
+          "status": "completed",
+          "created_at": "2025-04-13T09:00:00Z"
+        }
+      ]
+    }</code>
+    
+            </li>
+          </ul>
+        </section>
+        <section class="main-section" id="Error_processing">
+          <header>
+            <h2 class="main-title">Error processing</h2>
+          </header>
+          <p class="main-text">
+            API повертає деталізовані повідомлення про помилки. Усі помилки містять ключ <strong>error</strong> і код
+            помилки. Наприклад, код 400 вказує на некоректний запит. Код 401 означає проблему з аутентифікацією. Код 404
+            повертається, якщо ресурс не знайдено. Кожна помилка супроводжується описом. Це допомагає швидко знайти
+            проблему. API також повертає коди для внутрішніх помилок (500). Рекомендуємо логувати помилки для аналізу.
+            Переконайтеся, що ваші запити відповідають документації. Ця секція допоможе вам зрозуміти структуру помилок.
+            Використовуйте ці дані для відлагодження.
+          </p>
+          <ul class="main-list">
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Приклад коду</strong>(Помилка через некоректний запит):
+    
+              </p>
+              <code>curl -X POST https://api.todoexample.com/v1/tasks \
+      -H "Authorization: Bearer <your-token>" \
+      -H "Content-Type: application/json" \
+      -d '{"title": ""}'</code>
+            </li>
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Очікувана відповідь:</strong>
+    
+              </p>
+              <code>{
+      "error": "Назва завдання не може бути порожньою",
+      "code": "INVALID_REQUEST"
+    }</code>
+    
+            </li>
+          </ul>
+        </section>
+        <section class="main-section" id="Restrictions_and_quotas">
+          <header>
+            <h2 class="main-title">Restrictions and quotas</h2>
+          </header>
+          <p class="main-text">
+            API має обмеження для захисту від перевантаження. Безкоштовний план дозволяє 100 запитів за хвилину. Платні
+            плани збільшують ліміт до 1000 запитів. Перевищення ліміту повертає код 429. Кожен запит враховується, включно з
+            помилковими. Великі запити (наприклад, списки з 100+ завдань) можуть оброблятися довше. Рекомендуємо
+            оптимізувати запити для ефективності. API повертає заголовок <strong>X-Rate-Limit-Remaining</strong> із залишком
+            квоти. Використовуйте його для моніторингу. Якщо ліміт вичерпано, зачекайте хвилину. Ця секція допоможе вам
+            уникнути блокування. Дотримуйтесь рекомендацій для стабільної роботи.
+          </p>
+          <ul class="main-list">
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Приклад коду</strong>(Перевірка залишку квоти):
+    
+              </p>
+              <code>curl -X GET https://api.todoexample.com/v1/tasks \
+      -H "Authorization: Bearer <your-token>" \
+      -i</code>
+            </li>
+            <li class="main-item">
+              <p class="main-text">
+                <strong>Очікувана відповідь:</strong>
+    
+              </p>
+              <code>HTTP/1.1 200 OK
+    X-Rate-Limit-Remaining: 99
+    X-Rate-Limit-Limit: 100</code>
+    
+            </li>
+          </ul>
+        </section>
+    
+    
+   
+     </li>
+  </ul>
+  </main>
+</body>
+
+</html>
